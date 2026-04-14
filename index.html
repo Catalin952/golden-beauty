@@ -1,44 +1,74 @@
-mport { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { motion } from "framer-motion"; import { ShoppingCart, Star } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { ShoppingBag, Sparkles, Truck, Phone } from "lucide-react"; import { motion } from "framer-motion";
 
-export default function GoldenBeautyStore() { return ( <div className="min-h-screen bg-black text-white"> {/* HERO */} <div className="relative h-[70vh] flex items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1600&q=80')", }} > <div className="absolute inset-0 bg-black/60" /> <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 p-6" > <h1 className="text-5xl font-bold tracking-wide"> Golden Beauty </h1> <p className="mt-4 text-lg text-gray-200"> Extensii de păr premium • Luxury Hair Collection </p> <Button className="mt-6 bg-yellow-500 text-black hover:bg-yellow-400"> Vezi produsele </Button> </motion.div> </div>
+export default function GoldenBeautyStore() { return ( <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white"> {/* Header */} <header className="flex items-center justify-between p-6 shadow-sm bg-white/80 backdrop-blur"> <h1 className="text-2xl font-bold text-pink-600">Golden Beauty</h1> <nav className="space-x-4 hidden md:block"> <a href="#" className="text-gray-600 hover:text-pink-600">Acasă</a> <a href="#produse" className="text-gray-600 hover:text-pink-600">Produse</a> <a href="#contact" className="text-gray-600 hover:text-pink-600">Contact</a> </nav> </header>
 
-{/* PRODUCTS */}
-  <div className="max-w-6xl mx-auto px-4 py-16">
-    <h2 className="text-3xl font-bold mb-8 text-center">
-      Produse populare
-    </h2>
+{/* Hero */}
+  <section className="text-center py-20 px-6">
+    <motion.h2 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="text-4xl md:text-6xl font-bold text-gray-800"
+    >
+      Extensii de păr premium & produse de beauty
+    </motion.h2>
+    <p className="mt-4 text-gray-500">Transformă-ți look-ul cu produse de calitate profesională</p>
+    <Button className="mt-6 bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-2xl">
+      Vezi produsele
+    </Button>
+  </section>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {[1, 2, 3].map((item) => (
-        <Card key={item} className="bg-zinc-900 border-zinc-800">
+  {/* Features */}
+  <section className="grid md:grid-cols-3 gap-6 px-6 py-12 max-w-6xl mx-auto">
+    <Card>
+      <CardContent className="p-6 text-center">
+        <Sparkles className="mx-auto text-pink-600" />
+        <h3 className="font-bold mt-2">Calitate Premium</h3>
+        <p className="text-sm text-gray-500">Produse testate și profesionale</p>
+      </CardContent>
+    </Card>
+
+    <Card>
+      <CardContent className="p-6 text-center">
+        <Truck className="mx-auto text-pink-600" />
+        <h3 className="font-bold mt-2">Livrare rapidă</h3>
+        <p className="text-sm text-gray-500">Curier rapid cu plată ramburs</p>
+      </CardContent>
+    </Card>
+
+    <Card>
+      <CardContent className="p-6 text-center">
+        <Phone className="mx-auto text-pink-600" />
+        <h3 className="font-bold mt-2">Suport 24/7</h3>
+        <p className="text-sm text-gray-500">Contact direct pe WhatsApp</p>
+      </CardContent>
+    </Card>
+  </section>
+
+  {/* Products */}
+  <section id="produse" className="px-6 py-12 bg-white">
+    <h2 className="text-3xl font-bold text-center mb-8">Produse populare</h2>
+    <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      {[1,2,3].map((item) => (
+        <Card key={item} className="overflow-hidden">
+          <div className="h-48 bg-pink-100 flex items-center justify-center">
+            <ShoppingBag size={40} className="text-pink-500" />
+          </div>
           <CardContent className="p-4">
-            <div className="h-60 bg-zinc-800 rounded-xl mb-4 flex items-center justify-center">
-              <span className="text-gray-400">Imagine produs</span>
-            </div>
-
-            <h3 className="text-xl font-semibold">
-              Extensii Premium #{item}
-            </h3>
-
-            <div className="flex items-center gap-1 text-yellow-400 mt-1">
-              <Star size={16} /> <Star size={16} /> <Star size={16} /> <Star size={16} />
-            </div>
-
-            <p className="text-gray-400 mt-2">Calitate luxury, păr natural</p>
-
-            <Button className="w-full mt-4 bg-yellow-500 text-black hover:bg-yellow-400">
-              <ShoppingCart className="mr-2" size={16} />
-              Adaugă în coș
+            <h3 className="font-bold">Extensii premium #{item}</h3>
+            <p className="text-sm text-gray-500">Calitate profesională, aspect natural</p>
+            <Button className="mt-3 w-full bg-pink-600 hover:bg-pink-700 text-white">
+              Cumpără acum
             </Button>
           </CardContent>
         </Card>
       ))}
     </div>
-  </div>
+  </section>
 
-  {/* FOOTER */}
-  <footer className="text-center py-10 border-t border-zinc-800 text-gray-400">
-    © 2026 Golden Beauty. Toate drepturile rezervate.
+  {/* Contact */}
+  <footer id="contact" className="p-6 text-center bg-gray-50">
+    <p className="font-semibold">Contact: 0799399592</p>
+    <p className="text-sm text-gray-500">Golden Beauty © 2026</p>
   </footer>
 </div>
 
