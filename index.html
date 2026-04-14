@@ -3,128 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Golden Beauty</title>
+<title>Golden Beauty | Affordable Luxury Beauty</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #000;
-  color: #fff;
+body{
+margin:0;
+font-family:Arial;
+background:#0f0f0f;
+color:white;
 }
 
-header {
-  background: black;
-  padding: 15px;
-  text-align: center;
-  font-size: 24px;
-  color: gold;
-  font-weight: bold;
+/* NAV */
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+background:black;
+border-bottom:1px solid #d4af37;
+position:sticky;
+top:0;
+z-index:10;
 }
 
-.hero {
-  text-align: center;
-  padding: 40px;
+nav h1{
+color:#d4af37;
+margin:0;
+font-size:18px;
 }
 
-.hero h1 {
-  font-size: 28px;
+.cart-btn{
+cursor:pointer;
 }
 
-.products {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  padding: 15px;
+/* HERO */
+.hero{
+text-align:center;
+padding:70px 20px;
+background:linear-gradient(to right,#000,#1a1a1a);
 }
 
-.product {
-  background: #111;
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
+.hero h2{
+font-size:38px;
+color:#d4af37;
+margin-bottom:10px;
 }
 
-.product img {
-  width: 100%;
-  border-radius: 10px;
+.hero p{
+color:#ccc;
 }
 
-.price {
-  color: gold;
-  margin: 10px 0;
+/* SECTIONS */
+.section{
+padding:20px;
+text-align:center;
 }
 
-button {
-  background: gold;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  cursor: pointer;
-  font-weight: bold;
+.section h3{
+color:#d4af37;
+margin-bottom:15px;
 }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
+/* PRODUCTS */
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+padding:10px;
+}
+
+.card{
+background:#1a1a1a;
+padding:10px;
+border-radius:12px;
+text-align:center;
+}
+
+.card img{
+width:100%;
+height:170px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.price{
+color:#d4af37;
+font-weight:bold;
+}
+
+button{
+background:#d4af37;
+border:none;
+padding:10px;
+width:100%;
+margin-top:8px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* CART */
+.cart{
+position:fixed;
+right:10px;
+top:70px;
+width:300px;
+background:#111;
+padding:15px;
+border-radius:10px;
+border:1px solid #d4af37;
+display:none;
+z-index:20;
+}
+
+input{
+width:100%;
+padding:8px;
+margin:5px 0;
+border:none;
+border-radius:5px;
+}
+
+/* FOOTER */
+footer{
+text-align:center;
+padding:20px;
+color:#777;
+border-top:1px solid #222;
+margin-top:20px;
+}
+
+.whatsapp{
+display:block;
+margin-top:10px;
+background:#25D366;
+color:white;
+text-align:center;
+padding:10px;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<header>Golden Beauty</header>
+<!-- NAV -->
+<nav>
+<h1>GOLDEN BEAUTY</h1>
+<div class="cart-btn" onclick="toggleCart()">
+🛒 Coș (<span id="count">0</span>)
+</div>
+</nav>
 
-<section class="hero">
-  <h1>Extensii de păr & produse cosmetice premium</h1>
-  <p>Livrare în toată Europa</p>
-</section>
-
-<section class="products">
-
-<div class="product">
-<img src="https://via.placeholder.com/300">
-<h3>Extensii păr natural</h3>
-<p class="price">250 RON</p>
-<button onclick="order('Extensii păr natural - 250 RON')">Comandă</button>
+<!-- HERO -->
+<div class="hero">
+<h2>Affordable Luxury Beauty</h2>
+<p>Skincare & Haircare pentru glow-ul tău natural</p>
 </div>
 
-<div class="product">
-<img src="https://via.placeholder.com/300">
-<h3>Extensii clip-on</h3>
-<p class="price">180 RON</p>
-<button onclick="order('Extensii clip-on - 180 RON')">Comandă</button>
+<!-- BRAND STORY -->
+<div class="section">
+<h3>De ce Golden Beauty?</h3>
+<p style="color:#ccc; max-width:700px; margin:auto;">
+Golden Beauty este un brand de beauty creat pentru femei care vor rezultate reale,
+produse premium și o experiență de lux accesibil.
+</p>
 </div>
 
-<div class="product">
-<img src="https://via.placeholder.com/300">
-<h3>Șampon profesional</h3>
-<p class="price">60 RON</p>
-<button onclick="order('Șampon profesional - 60 RON')">Comandă</button>
+<!-- PRODUCTS -->
+<div class="section">
+<h3>Best Sellers</h3>
+
+<div class="products">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1526045478516-99145907023c">
+<h4>Golden Glow Serum</h4>
+<p class="price">99 RON</p>
+<button onclick="add('Golden Glow Serum',99)">Adaugă</button>
 </div>
 
-<div class="product">
-<img src="https://via.placeholder.com/300">
-<h3>Ulei pentru păr</h3>
-<p class="price">45 RON</p>
-<button onclick="order('Ulei pentru păr - 45 RON')">Comandă</button>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796">
+<h4>Royal Silk Extensions</h4>
+<p class="price">199 RON</p>
+<button onclick="add('Royal Silk Extensions',199)">Adaugă</button>
 </div>
 
-</section>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
+<h4>Hydration Cream</h4>
+<p class="price">89 RON</p>
+<button onclick="add('Hydration Cream',89)">Adaugă</button>
+</div>
 
-<footer>
-© 2026 Golden Beauty | Comenzi WhatsApp: 0799399592
-</footer>
+</div>
+</div>
 
-<script>
-function order(product) {
-  let phone = "40799399592";
-  let message = "Bună! Vreau să comand: " + product;
-  let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-  window.open(url, "_blank");
-}
-</script>
-
-</body>
-</html>
+<!-- REVIEWS -->
+<div class="section">
+<h3>Recenzii</h3>
+<p style="color:#ccc">
