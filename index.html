@@ -3,12 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Golden Beauty | Affordable Luxury Beauty</title>
+
+<title>Golden Beauty | Extensions & Beauty Luxury</title>
+
+<meta name="description" content="Golden Beauty - extensii de păr și cosmetice luxury accesibile. Look premium, calitate reală.">
+<meta name="keywords" content="extensii par, beauty, cosmetice, luxury hair, golden beauty">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 body{
 margin:0;
-font-family:Arial;
+font-family:Inter, sans-serif;
 background:#0f0f0f;
 color:white;
 }
@@ -18,7 +24,7 @@ nav{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 20px;
+padding:15px 25px;
 background:black;
 border-bottom:1px solid #d4af37;
 position:sticky;
@@ -28,89 +34,111 @@ z-index:10;
 
 nav h1{
 color:#d4af37;
-margin:0;
-font-size:18px;
-}
-
-.cart-btn{
-cursor:pointer;
+font-size:20px;
+letter-spacing:1px;
 }
 
 /* HERO */
 .hero{
+height:75vh;
+background:url('https://images.unsplash.com/photo-1522337660859-02fbefca4702') center/cover;
+display:flex;
+align-items:center;
+justify-content:center;
 text-align:center;
-padding:70px 20px;
-background:linear-gradient(to right,#000,#1a1a1a);
+position:relative;
+}
+
+.hero::after{
+content:"";
+position:absolute;
+top:0;left:0;right:0;bottom:0;
+background:rgba(0,0,0,0.6);
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+max-width:700px;
+padding:20px;
 }
 
 .hero h2{
-font-size:38px;
+font-size:42px;
 color:#d4af37;
 margin-bottom:10px;
 }
 
 .hero p{
-color:#ccc;
+color:#ddd;
 }
 
-/* SECTIONS */
+.btn{
+background:#d4af37;
+color:black;
+padding:12px 20px;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+margin-top:15px;
+}
+
+/* SECTION */
 .section{
-padding:20px;
+padding:50px 20px;
 text-align:center;
 }
 
 .section h3{
 color:#d4af37;
-margin-bottom:15px;
+margin-bottom:20px;
 }
 
-/* PRODUCTS */
-.products{
+/* GRID */
+.grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
 padding:10px;
 }
 
 .card{
 background:#1a1a1a;
-padding:10px;
 border-radius:12px;
-text-align:center;
+overflow:hidden;
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.03);
 }
 
 .card img{
 width:100%;
-height:170px;
+height:220px;
 object-fit:cover;
-border-radius:10px;
+}
+
+.card-content{
+padding:15px;
 }
 
 .price{
 color:#d4af37;
 font-weight:bold;
-}
-
-button{
-background:#d4af37;
-border:none;
-padding:10px;
-width:100%;
-margin-top:8px;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
+margin-top:5px;
 }
 
 /* CART */
 .cart{
 position:fixed;
-right:10px;
-top:70px;
+right:15px;
+top:80px;
 width:300px;
 background:#111;
 padding:15px;
-border-radius:10px;
+border-radius:12px;
 border:1px solid #d4af37;
 display:none;
 z-index:20;
@@ -121,16 +149,7 @@ width:100%;
 padding:8px;
 margin:5px 0;
 border:none;
-border-radius:5px;
-}
-
-/* FOOTER */
-footer{
-text-align:center;
-padding:20px;
-color:#777;
-border-top:1px solid #222;
-margin-top:20px;
+border-radius:6px;
 }
 
 .whatsapp{
@@ -144,65 +163,69 @@ border-radius:8px;
 text-decoration:none;
 font-weight:bold;
 }
+
+/* FOOTER */
+footer{
+text-align:center;
+padding:20px;
+color:#777;
+border-top:1px solid #222;
+}
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <nav>
 <h1>GOLDEN BEAUTY</h1>
-<div class="cart-btn" onclick="toggleCart()">
+<div onclick="toggleCart()" style="cursor:pointer">
 🛒 Coș (<span id="count">0</span>)
 </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-<h2>Affordable Luxury Beauty</h2>
-<p>Skincare & Haircare pentru glow-ul tău natural</p>
+<div class="hero-content">
+<h2>Luxury Hair Extensions</h2>
+<p>Extensii de păr premium + beauty essentials pentru un look perfect</p>
+<button class="btn" onclick="document.getElementById('shop').scrollIntoView()">Vezi Colecția</button>
+</div>
 </div>
 
-<!-- BRAND STORY -->
-<div class="section">
-<h3>De ce Golden Beauty?</h3>
-<p style="color:#ccc; max-width:700px; margin:auto;">
-Golden Beauty este un brand de beauty creat pentru femei care vor rezultate reale,
-produse premium și o experiență de lux accesibil.
-</p>
-</div>
+<!-- HAIR COLLECTION -->
+<div class="section" id="shop">
+<h3>Hair Extensions Collection</h3>
 
-<!-- PRODUCTS -->
-<div class="section">
-<h3>Best Sellers</h3>
-
-<div class="products">
+<div class="grid">
 
 <div class="card">
-<img src="https://images.unsplash.com/photo-1526045478516-99145907023c">
-<h4>Golden Glow Serum</h4>
-<p class="price">99 RON</p>
-<button onclick="add('Golden Glow Serum',99)">Adaugă</button>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796">
+<img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e">
+<div class="card-content">
 <h4>Royal Silk Extensions</h4>
 <p class="price">199 RON</p>
-<button onclick="add('Royal Silk Extensions',199)">Adaugă</button>
+<button class="btn" onclick="add('Royal Silk Extensions',199)">Adaugă în coș</button>
+</div>
 </div>
 
 <div class="card">
-<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
-<h4>Hydration Cream</h4>
-<p class="price">89 RON</p>
-<button onclick="add('Hydration Cream',89)">Adaugă</button>
+<img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e">
+<div class="card-content">
+<h4>Luxury Blonde Waves</h4>
+<p class="price">249 RON</p>
+<button class="btn" onclick="add('Luxury Blonde Waves',249)">Adaugă în coș</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1">
+<div class="card-content">
+<h4>Silky Straight Extensions</h4>
+<p class="price">229 RON</p>
+<button class="btn" onclick="add('Silky Straight Extensions',229)">Adaugă în coș</button>
+</div>
 </div>
 
 </div>
 </div>
 
-<!-- REVIEWS -->
-<div class="section">
-<h3>Recenzii</h3>
-<p style="color:#ccc">
+<!-- SKIN
