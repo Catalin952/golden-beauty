@@ -1,231 +1,45 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+mport { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { motion } from "framer-motion"; import { ShoppingCart, Star } from "lucide-react";
 
-<title>Golden Beauty | Extensions & Beauty Luxury</title>
+export default function GoldenBeautyStore() { return ( <div className="min-h-screen bg-black text-white"> {/* HERO */} <div className="relative h-[70vh] flex items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1600&q=80')", }} > <div className="absolute inset-0 bg-black/60" /> <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 p-6" > <h1 className="text-5xl font-bold tracking-wide"> Golden Beauty </h1> <p className="mt-4 text-lg text-gray-200"> Extensii de păr premium • Luxury Hair Collection </p> <Button className="mt-6 bg-yellow-500 text-black hover:bg-yellow-400"> Vezi produsele </Button> </motion.div> </div>
 
-<meta name="description" content="Golden Beauty - extensii de păr și cosmetice luxury accesibile. Look premium, calitate reală.">
-<meta name="keywords" content="extensii par, beauty, cosmetice, luxury hair, golden beauty">
+{/* PRODUCTS */}
+  <div className="max-w-6xl mx-auto px-4 py-16">
+    <h2 className="text-3xl font-bold mb-8 text-center">
+      Produse populare
+    </h2>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {[1, 2, 3].map((item) => (
+        <Card key={item} className="bg-zinc-900 border-zinc-800">
+          <CardContent className="p-4">
+            <div className="h-60 bg-zinc-800 rounded-xl mb-4 flex items-center justify-center">
+              <span className="text-gray-400">Imagine produs</span>
+            </div>
 
-<style>
-body{
-margin:0;
-font-family:Inter, sans-serif;
-background:#0f0f0f;
-color:white;
-}
+            <h3 className="text-xl font-semibold">
+              Extensii Premium #{item}
+            </h3>
 
-/* NAV */
-nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 25px;
-background:black;
-border-bottom:1px solid #d4af37;
-position:sticky;
-top:0;
-z-index:10;
-}
+            <div className="flex items-center gap-1 text-yellow-400 mt-1">
+              <Star size={16} /> <Star size={16} /> <Star size={16} /> <Star size={16} />
+            </div>
 
-nav h1{
-color:#d4af37;
-font-size:20px;
-letter-spacing:1px;
-}
+            <p className="text-gray-400 mt-2">Calitate luxury, păr natural</p>
 
-/* HERO */
-.hero{
-height:75vh;
-background:url('https://images.unsplash.com/photo-1522337660859-02fbefca4702') center/cover;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-position:relative;
-}
+            <Button className="w-full mt-4 bg-yellow-500 text-black hover:bg-yellow-400">
+              <ShoppingCart className="mr-2" size={16} />
+              Adaugă în coș
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
 
-.hero::after{
-content:"";
-position:absolute;
-top:0;left:0;right:0;bottom:0;
-background:rgba(0,0,0,0.6);
-}
-
-.hero-content{
-position:relative;
-z-index:2;
-max-width:700px;
-padding:20px;
-}
-
-.hero h2{
-font-size:42px;
-color:#d4af37;
-margin-bottom:10px;
-}
-
-.hero p{
-color:#ddd;
-}
-
-.btn{
-background:#d4af37;
-color:black;
-padding:12px 20px;
-border:none;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-margin-top:15px;
-}
-
-/* SECTION */
-.section{
-padding:50px 20px;
-text-align:center;
-}
-
-.section h3{
-color:#d4af37;
-margin-bottom:20px;
-}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-padding:10px;
-}
-
-.card{
-background:#1a1a1a;
-border-radius:12px;
-overflow:hidden;
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.03);
-}
-
-.card img{
-width:100%;
-height:220px;
-object-fit:cover;
-}
-
-.card-content{
-padding:15px;
-}
-
-.price{
-color:#d4af37;
-font-weight:bold;
-margin-top:5px;
-}
-
-/* CART */
-.cart{
-position:fixed;
-right:15px;
-top:80px;
-width:300px;
-background:#111;
-padding:15px;
-border-radius:12px;
-border:1px solid #d4af37;
-display:none;
-z-index:20;
-}
-
-input{
-width:100%;
-padding:8px;
-margin:5px 0;
-border:none;
-border-radius:6px;
-}
-
-.whatsapp{
-display:block;
-margin-top:10px;
-background:#25D366;
-color:white;
-text-align:center;
-padding:10px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-}
-
-/* FOOTER */
-footer{
-text-align:center;
-padding:20px;
-color:#777;
-border-top:1px solid #222;
-}
-</style>
-</head>
-
-<body>
-
-<nav>
-<h1>GOLDEN BEAUTY</h1>
-<div onclick="toggleCart()" style="cursor:pointer">
-🛒 Coș (<span id="count">0</span>)
-</div>
-</nav>
-
-<!-- HERO -->
-<div class="hero">
-<div class="hero-content">
-<h2>Luxury Hair Extensions</h2>
-<p>Extensii de păr premium + beauty essentials pentru un look perfect</p>
-<button class="btn" onclick="document.getElementById('shop').scrollIntoView()">Vezi Colecția</button>
-</div>
+  {/* FOOTER */}
+  <footer className="text-center py-10 border-t border-zinc-800 text-gray-400">
+    © 2026 Golden Beauty. Toate drepturile rezervate.
+  </footer>
 </div>
 
-<!-- HAIR COLLECTION -->
-<div class="section" id="shop">
-<h3>Hair Extensions Collection</h3>
-
-<div class="grid">
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e">
-<div class="card-content">
-<h4>Royal Silk Extensions</h4>
-<p class="price">199 RON</p>
-<button class="btn" onclick="add('Royal Silk Extensions',199)">Adaugă în coș</button>
-</div>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e">
-<div class="card-content">
-<h4>Luxury Blonde Waves</h4>
-<p class="price">249 RON</p>
-<button class="btn" onclick="add('Luxury Blonde Waves',249)">Adaugă în coș</button>
-</div>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1">
-<div class="card-content">
-<h4>Silky Straight Extensions</h4>
-<p class="price">229 RON</p>
-<button class="btn" onclick="add('Silky Straight Extensions',229)">Adaugă în coș</button>
-</div>
-</div>
-
-</div>
-</div>
-
-<!-- SKIN
+); }
