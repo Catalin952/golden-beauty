@@ -1,106 +1,128 @@
-/***************** GOLDEN BEAUTY - FULL ECOMMERCE (NEXT.JS + STRIPE)
+"use client";
 
+import { useState } from "react"; import { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { ShoppingBag, Star, Truck, Shield } from "lucide-react"; import { loadStripe } from "@stripe/stripe-js";
 
----
-
-STRUCTURĂ: magazin real complet pregătit pentru deploy
-
-Next.js frontend
-
-API Stripe checkout
-
-WhatsApp fallback
-
-SEO basic *****************/
-
-
-// ====================== // 1. FRONTEND (app/page.jsx) // ======================
-
-'use client'; import { useState } from 'react'; import { Card, CardContent } from '@/components/ui/card'; import { Button } from '@/components/ui/button'; import { ShoppingBag } from 'lucide-react'; import { loadStripe } from '@stripe/stripe-js';
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe( process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "" );
 
 const DELIVERY_FEE = 20;
 
-const products = [ { id: 1, name: 'Extensii păr premium 50cm', price: 249, image: '', desc: 'Aspect natural' }, { id: 2, name: 'Extensii păr luxury 60cm', price: 299, image: '', desc: 'Volum mare' }, { id: 3, name: 'Set îngrijire păr', price: 129, image: '', desc: 'Întreținere' }, ];
+const products = [ { id: 1, name: "Extensii păr premium 50cm", price: 249, image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80", desc: "Aspect natural, calitate salon", }, { id: 2, name: "Extensii păr luxury 60cm", price: 299, image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=800&q=80", desc: "Volum mare, premium grade", }, { id: 3, name: "Set îngrijire păr profesional", price: 129, image: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?auto=format&fit=crop&w=800&q=80", desc: "Întreținere și protecție", }, ];
 
-export default function Page() { const [cart, setCart] = useState([]);
+export default function Page() { const [cart, setCart] = useState([]); const [loading, setLoading] = useState(false);
 
-const addToCart = (p) => { setCart((prev) => { const exists = prev.find((x) => x.id === p.id); if (exists) return prev.map((x) => x.id === p.id ? { ...x, qty: x.qty + 1 } : x); return [...prev, { ...p, qty: 1 }]; }); };
+const addToCart = (p) => { setCart((prev) => { const exists = prev.find((x) => x.id === p.id); if (exists) return prev.map((x) => x.id === p.id ? { ...x, qty: x.qty + 1 } : x ); return [...prev, { ...p, qty: 1 }]; }); };
 
 const subtotal = cart.reduce((a, b) => a + b.price * b.qty, 0); const total = subtotal + (cart.length ? DELIVERY_FEE : 0);
 
-const checkoutStripe = async () => { const res = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cart }), });
+const checkoutStripe = async () => { try { setLoading(true);
 
-const data = await res.json();
-const stripe = await stripePromise;
-await stripe.redirectToCheckout({ sessionId: data.id });
+const res = await fetch("/api/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ cart }),
+  });
+
+  const data = await res.json();
+
+  const stripe = await stripePromise;
+  await stripe.redirectToCheckout({ sessionId: data.id });
+} catch (e) {
+  alert("Eroare la plată");
+} finally {
+  setLoading(false);
+}
 
 };
 
-const whatsappOrder = () => { const msg = cart.map(p => ${p.name} x${p.qty}).join('\n'); window.open(https://wa.me/40799399592?text=Comandă:%0A${msg}%0ATotal:${total} RON); };
+const whatsappOrder = () => { const msg = cart.map((p) => ${p.name} x${p.qty}).join("\n"); window.open( https://wa.me/40799399592?text=🛍 Comandă Golden Beauty:%0A${msg}%0A%0ATotal: ${total} RON ); };
 
-return ( <div className="p-6"> <h1 className="text-3xl font-bold text-pink-600">Golden Beauty</h1>
+return ( <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white"> {/* HEADER */} <header className="flex justify-between items-center p-6 bg-white shadow-sm"> <h1 className="text-2xl font-bold text-pink-600">Golden Beauty</h1> <div className="flex items-center gap-2"> <ShoppingBag /> <span>{cart.reduce((a, b) => a + b.qty, 0)}</span> </div> </header>
 
-<div className="grid md:grid-cols-3 gap-4 mt-6">
-    {products.map(p => (
-      <Card key={p.id}>
+{/* HERO */}
+  <section className="text-center py-16 px-6 bg-gradient-to-r from-pink-100 to-pink-50">
+    <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+      Extensii de păr premium & beauty luxury
+    </h2>
+    <p className="mt-3 text-gray-600">
+      Livrare rapidă • Ramburs • Plată card
+    </p>
+
+    <div className="flex justify-center gap-4 mt-6">
+      <div className="flex items-center gap-2 text-sm text-gray-600">
+        <Star className="text-pink-500" /> Calitate premium
+      </div>
+      <div className="flex items-center gap-2 text-sm text-gray-600">
+        <Truck className="text-pink-500" /> Livrare rapidă
+      </div>
+      <div className="flex items-center gap-2 text-sm text-gray-600">
+        <Shield className="text-pink-500" /> Siguranță
+      </div>
+    </div>
+  </section>
+
+  {/* PRODUCTS */}
+  <section className="grid md:grid-cols-3 gap-6 p-6 max-w-6xl mx-auto">
+    {products.map((p) => (
+      <Card key={p.id} className="overflow-hidden rounded-2xl shadow-lg">
+        <img
+          src={p.image}
+          alt={p.name}
+          className="h-52 w-full object-cover"
+        />
         <CardContent className="p-4">
-          <ShoppingBag />
-          <h2 className="font-bold">{p.name}</h2>
-          <p>{p.desc}</p>
-          <p className="font-bold">{p.price} RON</p>
-          <Button onClick={() => addToCart(p)}>Adaugă</Button>
+          <h3 className="font-bold text-lg">{p.name}</h3>
+          <p className="text-sm text-gray-500">{p.desc}</p>
+          <p className="font-bold mt-2 text-pink-600">{p.price} RON</p>
+
+          <Button
+            className="w-full mt-3 bg-pink-600 hover:bg-pink-700"
+            onClick={() => addToCart(p)}
+          >
+            Adaugă în coș
+          </Button>
         </CardContent>
       </Card>
     ))}
-  </div>
+  </section>
 
+  {/* CART */}
   {cart.length > 0 && (
-    <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow">
-      <p>Subtotal: {subtotal} RON</p>
-      <p>Total: {total} RON</p>
+    <div className="fixed bottom-0 left-0 right-0 bg-white shadow-2xl p-4">
+      <div className="max-w-4xl mx-auto">
+        <p className="font-bold mb-2">Coș cumpărături</p>
 
-      <div className="flex gap-2">
-        <Button onClick={whatsappOrder} className="bg-green-600">WhatsApp</Button>
-        <Button onClick={checkoutStripe} className="bg-black">Card</Button>
+        {cart.map((p) => (
+          <div key={p.id} className="flex justify-between text-sm">
+            <span>{p.name} x{p.qty}</span>
+            <span>{p.price * p.qty} RON</span>
+          </div>
+        ))}
+
+        <div className="mt-2 text-sm">
+          <p>Subtotal: {subtotal} RON</p>
+          <p>Transport: {DELIVERY_FEE} RON</p>
+          <p className="font-bold">Total: {total} RON</p>
+        </div>
+
+        <div className="flex gap-2 mt-3">
+          <Button
+            className="w-1/2 bg-green-600"
+            onClick={whatsappOrder}
+          >
+            WhatsApp
+          </Button>
+
+          <Button
+            className="w-1/2 bg-black"
+            onClick={checkoutStripe}
+            disabled={loading}
+          >
+            {loading ? "Se procesează..." : "Plată card"}
+          </Button>
+        </div>
       </div>
     </div>
   )}
 </div>
 
 ); }
-
-// ====================== // 2. BACKEND STRIPE (app/api/checkout/route.js) // ======================
-
-import Stripe from 'stripe';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-export async function POST(req) { const { cart } = await req.json();
-
-const session = await stripe.checkout.sessions.create({ payment_method_types: ['card'], mode: 'payment', line_items: cart.map(item => ({ price_data: { currency: 'ron', product_data: { name: item.name }, unit_amount: item.price * 100, }, quantity: item.qty, })), success_url: ${process.env.NEXT_PUBLIC_BASE_URL}/success, cancel_url: ${process.env.NEXT_PUBLIC_BASE_URL}/cancel, });
-
-return Response.json({ id: session.id }); }
-
-// ====================== // 3. ENV FILE (.env.local) // ======================
-
-// STRIPE_SECRET_KEY=xxx // NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=xxx // NEXT_PUBLIC_BASE_URL=https://domeniul-tau.ro
-
-// ====================== // 4. DEPLOY (IMPORTANT) // ======================
-
-/*
-
-1. Urcă pe GitHub
-
-
-2. Conectează la Vercel.com
-
-
-3. Adaugă env variables
-
-
-4. Buy domain (ex: goldenbeauty.ro)
-
-
-5. Deploy → LIVE SHOP */
