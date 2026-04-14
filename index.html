@@ -1,75 +1,106 @@
-import { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { ShoppingBag, Sparkles, Truck, Phone } from "lucide-react"; import { motion } from "framer-motion";
+/***************** GOLDEN BEAUTY - FULL ECOMMERCE (NEXT.JS + STRIPE)
 
-export default function GoldenBeautyStore() { return ( <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white"> {/* Header */} <header className="flex items-center justify-between p-6 shadow-sm bg-white/80 backdrop-blur"> <h1 className="text-2xl font-bold text-pink-600">Golden Beauty</h1> <nav className="space-x-4 hidden md:block"> <a href="#" className="text-gray-600 hover:text-pink-600">Acasă</a> <a href="#produse" className="text-gray-600 hover:text-pink-600">Produse</a> <a href="#contact" className="text-gray-600 hover:text-pink-600">Contact</a> </nav> </header>
 
-{/* Hero */}
-  <section className="text-center py-20 px-6">
-    <motion.h2 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="text-4xl md:text-6xl font-bold text-gray-800"
-    >
-      Extensii de păr premium & produse de beauty
-    </motion.h2>
-    <p className="mt-4 text-gray-500">Transformă-ți look-ul cu produse de calitate profesională</p>
-    <Button className="mt-6 bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-2xl">
-      Vezi produsele
-    </Button>
-  </section>
+---
 
-  {/* Features */}
-  <section className="grid md:grid-cols-3 gap-6 px-6 py-12 max-w-6xl mx-auto">
-    <Card>
-      <CardContent className="p-6 text-center">
-        <Sparkles className="mx-auto text-pink-600" />
-        <h3 className="font-bold mt-2">Calitate Premium</h3>
-        <p className="text-sm text-gray-500">Produse testate și profesionale</p>
-      </CardContent>
-    </Card>
+STRUCTURĂ: magazin real complet pregătit pentru deploy
 
-    <Card>
-      <CardContent className="p-6 text-center">
-        <Truck className="mx-auto text-pink-600" />
-        <h3 className="font-bold mt-2">Livrare rapidă</h3>
-        <p className="text-sm text-gray-500">Curier rapid cu plată ramburs</p>
-      </CardContent>
-    </Card>
+Next.js frontend
 
-    <Card>
-      <CardContent className="p-6 text-center">
-        <Phone className="mx-auto text-pink-600" />
-        <h3 className="font-bold mt-2">Suport 24/7</h3>
-        <p className="text-sm text-gray-500">Contact direct pe WhatsApp</p>
-      </CardContent>
-    </Card>
-  </section>
+API Stripe checkout
 
-  {/* Products */}
-  <section id="produse" className="px-6 py-12 bg-white">
-    <h2 className="text-3xl font-bold text-center mb-8">Produse populare</h2>
-    <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      {[1,2,3].map((item) => (
-        <Card key={item} className="overflow-hidden">
-          <div className="h-48 bg-pink-100 flex items-center justify-center">
-            <ShoppingBag size={40} className="text-pink-500" />
-          </div>
-          <CardContent className="p-4">
-            <h3 className="font-bold">Extensii premium #{item}</h3>
-            <p className="text-sm text-gray-500">Calitate profesională, aspect natural</p>
-            <Button className="mt-3 w-full bg-pink-600 hover:bg-pink-700 text-white">
-              Cumpără acum
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
+WhatsApp fallback
+
+SEO basic *****************/
+
+
+// ====================== // 1. FRONTEND (app/page.jsx) // ======================
+
+'use client'; import { useState } from 'react'; import { Card, CardContent } from '@/components/ui/card'; import { Button } from '@/components/ui/button'; import { ShoppingBag } from 'lucide-react'; import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
+const DELIVERY_FEE = 20;
+
+const products = [ { id: 1, name: 'Extensii păr premium 50cm', price: 249, image: '', desc: 'Aspect natural' }, { id: 2, name: 'Extensii păr luxury 60cm', price: 299, image: '', desc: 'Volum mare' }, { id: 3, name: 'Set îngrijire păr', price: 129, image: '', desc: 'Întreținere' }, ];
+
+export default function Page() { const [cart, setCart] = useState([]);
+
+const addToCart = (p) => { setCart((prev) => { const exists = prev.find((x) => x.id === p.id); if (exists) return prev.map((x) => x.id === p.id ? { ...x, qty: x.qty + 1 } : x); return [...prev, { ...p, qty: 1 }]; }); };
+
+const subtotal = cart.reduce((a, b) => a + b.price * b.qty, 0); const total = subtotal + (cart.length ? DELIVERY_FEE : 0);
+
+const checkoutStripe = async () => { const res = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cart }), });
+
+const data = await res.json();
+const stripe = await stripePromise;
+await stripe.redirectToCheckout({ sessionId: data.id });
+
+};
+
+const whatsappOrder = () => { const msg = cart.map(p => ${p.name} x${p.qty}).join('\n'); window.open(https://wa.me/40799399592?text=Comandă:%0A${msg}%0ATotal:${total} RON); };
+
+return ( <div className="p-6"> <h1 className="text-3xl font-bold text-pink-600">Golden Beauty</h1>
+
+<div className="grid md:grid-cols-3 gap-4 mt-6">
+    {products.map(p => (
+      <Card key={p.id}>
+        <CardContent className="p-4">
+          <ShoppingBag />
+          <h2 className="font-bold">{p.name}</h2>
+          <p>{p.desc}</p>
+          <p className="font-bold">{p.price} RON</p>
+          <Button onClick={() => addToCart(p)}>Adaugă</Button>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+
+  {cart.length > 0 && (
+    <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow">
+      <p>Subtotal: {subtotal} RON</p>
+      <p>Total: {total} RON</p>
+
+      <div className="flex gap-2">
+        <Button onClick={whatsappOrder} className="bg-green-600">WhatsApp</Button>
+        <Button onClick={checkoutStripe} className="bg-black">Card</Button>
+      </div>
     </div>
-  </section>
-
-  {/* Contact */}
-  <footer id="contact" className="p-6 text-center bg-gray-50">
-    <p className="font-semibold">Contact: 0799399592</p>
-    <p className="text-sm text-gray-500">Golden Beauty © 2026</p>
-  </footer>
+  )}
 </div>
 
 ); }
+
+// ====================== // 2. BACKEND STRIPE (app/api/checkout/route.js) // ======================
+
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export async function POST(req) { const { cart } = await req.json();
+
+const session = await stripe.checkout.sessions.create({ payment_method_types: ['card'], mode: 'payment', line_items: cart.map(item => ({ price_data: { currency: 'ron', product_data: { name: item.name }, unit_amount: item.price * 100, }, quantity: item.qty, })), success_url: ${process.env.NEXT_PUBLIC_BASE_URL}/success, cancel_url: ${process.env.NEXT_PUBLIC_BASE_URL}/cancel, });
+
+return Response.json({ id: session.id }); }
+
+// ====================== // 3. ENV FILE (.env.local) // ======================
+
+// STRIPE_SECRET_KEY=xxx // NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=xxx // NEXT_PUBLIC_BASE_URL=https://domeniul-tau.ro
+
+// ====================== // 4. DEPLOY (IMPORTANT) // ======================
+
+/*
+
+1. Urcă pe GitHub
+
+
+2. Conectează la Vercel.com
+
+
+3. Adaugă env variables
+
+
+4. Buy domain (ex: goldenbeauty.ro)
+
+
+5. Deploy → LIVE SHOP */
